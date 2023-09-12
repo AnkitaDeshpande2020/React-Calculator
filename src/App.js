@@ -1,8 +1,9 @@
-import logo from './logo.svg';
 import './App.css';
 import { useReducer } from 'react';
 import DigitButton from './DigitButton';
 import OperationButton from './OperationButton';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const ACTIONS={
   ADD_DIGIT: 'add-digit',
@@ -95,6 +96,7 @@ function reducer(state,{type,payload}){
   }
 }
 
+const customId = "custom-id-yes";
 function evaluate({currentOperand, previousOperand, operation}){
   const prev = parseFloat(previousOperand);
   const current = parseFloat(currentOperand);
@@ -113,8 +115,25 @@ function evaluate({currentOperand, previousOperand, operation}){
       result = prev * current;
       break;
     case "÷":
-      result = prev/current;
-      break;
+      if(current == 0 && prev == 0){
+        toast.error("Operation Not allowed", {
+          toastId: customId,
+          autoClose:2000
+        });
+        break;
+      }
+      else  if(current == 0){
+        toast.error("Operation Not allowed", {
+          toastId: customId,
+          autoClose:2000
+        });
+        break;
+      }
+      else{
+        result = prev/current;
+        break;
+      }
+      
   }
   return result.toString();
 }
@@ -134,6 +153,8 @@ function App() {
   const [{currentOperand, previousOperand, operation},dispatch]=useReducer(reducer,{});
   //dispatch({type: ACTIONS.ADD_DIGIT , payload:{digit: 1}})
   return (
+    <>
+    <ToastContainer className="toast-msg" />
     <div className="calculator-grid">
       <div className="output">
         <div className='previous-operand'>{formatOperand(previousOperand)} {operation}</div>
@@ -158,6 +179,8 @@ function App() {
       <DigitButton digit="0" dispatch={dispatch}></DigitButton>
       <button className='span-two' onClick={()=>dispatch({type:ACTIONS.EVALUATE})}>=</button>
     </div>
+    </>
+    
   );
 }
 

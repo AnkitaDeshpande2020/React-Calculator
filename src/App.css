@@ -53,3 +53,7 @@ body{
   color: #ffffff;
   font-size: 2.5rem;
 }
+
+.toast-msg{
+  margin-top: 10px;
+}
