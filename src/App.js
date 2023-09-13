@@ -26,7 +26,7 @@ function reducer(state,{type,payload}){
       if(payload.digit == "0" && state.currentOperand=="0"){
         return state;
       }
-      if(payload.digit == "." && state.currentOperand.includes(".")){
+      if(payload.digit == "." && state.currentOperand?.includes(".")){
         return state;
       }
       return {
@@ -120,18 +120,19 @@ function evaluate({currentOperand, previousOperand, operation}){
           toastId: customId,
           autoClose:2000
         });
-        break;
+       // result="Operation Not allowed";
+       break;
       }
       else  if(current == 0){
-        toast.error("Operation Not allowed", {
+        toast.error("Result is undefined", {
           toastId: customId,
           autoClose:2000
         });
-        break;
+       // result = "Result is undefined";\
+       break;
       }
       else{
         result = prev/current;
-        break;
       }
       
   }
